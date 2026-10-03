@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- MyMoney Design Palette -->
+    <color name="bg_dark">#0A111A</color>
+    <color name="card_dark">#132337</color>
+    <color name="card_dark_secondary">#1A2C42</color>
+    <color name="accent_teal">#00D0B3</color>
+    <color name="accent_teal_dark">#00A38C</color>
+    <color name="divider_dark">#2A3C53</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#A0AEC0</color>
+    <color name="text_muted">#718096</color>
+    <color name="income_green">#00E676</color>
+    <color name="expense_red">#FF5252</color>
+</resources>

@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MyMoney" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Theme colors and backgrounds matching dark design -->
+        <item name="colorPrimary">@color/accent_teal</item>
+        <item name="colorOnPrimary">@color/bg_dark</item>
+        <item name="colorSecondary">@color/accent_teal_dark</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/bg_dark</item>
+    </style>
+
+    <style name="Theme.MyMoney" parent="Base.Theme.MyMoney" />
+</resources>

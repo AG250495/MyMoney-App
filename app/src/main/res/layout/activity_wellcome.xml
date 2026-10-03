@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A111A"
+    android:fillViewport="true"
+    tools:context=".Wellcome">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <!-- Logo / Marca superior -->
+        <TextView
+            android:id="@+id/tvAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="MyMoney"
+            android:textColor="#00D0B3"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Card Contenedora Principal -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="24dp"
+            app:cardBackgroundColor="#132337"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAppName"
+            app:layout_constraintVertical_bias="0.4">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <!-- Icono de Bienvenida -->
+                <ImageView
+                    android:id="@+id/ivWelcomeIllustration"
+                    android:layout_width="92dp"
+                    android:layout_height="78dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="Logo de MyMoney"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Titular de Bienvenida -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="¡Bienvenido!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivWelcomeIllustration" />
+
+                <TextView
+                    android:id="@+id/tvSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Toma el control de tus finanzas personales con My-Money"
+                    android:textAlignment="center"
+                    android:textColor="#A0AEC0"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+                <!-- Opción 1: Google (iconTint @null para mantener colores originales) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoogleLogin"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="32dp"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="Continuar con Google"
+                    android:textAllCaps="false"
+                    android:textColor="#1F2937"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="14dp"
+                    app:icon="@drawable/ic_google_logo"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
+
+                <!-- Divisor Visual "O" -->
+                <TextView
+                    android:id="@+id/tvDivider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="— o acceda con su cuenta —"
+                    android:textColor="#718096"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnGoogleLogin" />
+
+                <!-- Opción 2: Iniciar sesión tradicional -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLoginEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="#00D0B3"
+                    android:text="Iniciar sesión con Correo"
+                    android:textAllCaps="false"
+                    android:textColor="#0A111A"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="14dp"
+                    app:elevation="2dp"
+                    app:icon="@android:drawable/ic_dialog_email"
+                    app:iconGravity="textStart"
+                    app:iconPadding="12dp"
+                    app:iconTint="#0A111A"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDivider" />
+
+                <!-- Opción 3: Registro -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRegister"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Crear cuenta nueva"
+                    android:textAllCaps="false"
+                    android:textColor="#00D0B3"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="14dp"
+                    app:strokeColor="#00D0B3"
+                    app:strokeWidth="1.5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnLoginEmail" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
