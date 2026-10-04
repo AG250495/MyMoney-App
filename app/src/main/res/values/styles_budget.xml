@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Campo de texto oscuro con borde teal al enfocar -->
+    <style name="Widget.MyMoney.TextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/budget_box_stroke</item>
+        <item name="hintTextColor">@color/accent_teal</item>
+        <item name="android:textColorHint">@color/text_muted</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="prefixTextColor">@color/text_secondary</item>
+        <item name="errorTextColor">@color/expense_red</item>
+        <item name="boxStrokeErrorColor">@color/expense_red</item>
+    </style>
+
+    <style name="Widget.MyMoney.TextInput.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/budget_box_stroke</item>
+        <item name="hintTextColor">@color/accent_teal</item>
+        <item name="android:textColorHint">@color/text_muted</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="endIconTint">@color/text_secondary</item>
+        <item name="errorTextColor">@color/expense_red</item>
+        <item name="boxStrokeErrorColor">@color/expense_red</item>
+    </style>
+</resources>

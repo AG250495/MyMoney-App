@@ -304,133 +304,23 @@
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
-                        <!-- Alimentos -->
+                        <!-- Aquí se agregan las filas desde Kotlin con datos reales -->
                         <LinearLayout
+                            android:id="@+id/llCategories"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+
+                        <TextView
+                            android:id="@+id/tvNoCategories"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/cat_food"
-                                android:textColor="@color/text_primary"
-                                android:textSize="13sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/cat_food_val"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="6dp"
-                            android:progress="38"
-                            app:indicatorColor="@color/income_green"
-                            app:trackColor="@color/card_dark_secondary"
-                            app:trackCornerRadius="4dp" />
-
-                        <!-- Servicios -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/cat_services"
-                                android:textColor="@color/text_primary"
-                                android:textSize="13sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/cat_services_val"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="6dp"
-                            android:progress="27"
-                            app:indicatorColor="@color/accent_teal"
-                            app:trackColor="@color/card_dark_secondary"
-                            app:trackCornerRadius="4dp" />
-
-                        <!-- Entretenimiento -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/cat_entertainment"
-                                android:textColor="@color/text_primary"
-                                android:textSize="13sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/cat_entertainment_val"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="6dp"
-                            android:progress="20"
-                            app:indicatorColor="#FFB300"
-                            app:trackColor="@color/card_dark_secondary"
-                            app:trackCornerRadius="4dp" />
-
-                        <!-- Transporte -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="14dp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@string/cat_transport"
-                                android:textColor="@color/text_primary"
-                                android:textSize="13sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/cat_transport_val"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:layout_width="match_parent"
-                            android:layout_height="8dp"
-                            android:layout_marginTop="6dp"
-                            android:progress="15"
-                            app:indicatorColor="#29B6F6"
-                            app:trackColor="@color/card_dark_secondary"
-                            app:trackCornerRadius="4dp" />
+                            android:gravity="center"
+                            android:text="Aún no hay gastos este mes"
+                            android:textColor="@color/text_muted"
+                            android:textSize="13sp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 

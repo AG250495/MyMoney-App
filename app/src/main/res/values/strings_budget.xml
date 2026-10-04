@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de la pantalla de Presupuesto/Gastos (Jose). Archivo propio para evitar conflictos en Git. -->
+<resources>
+    <string name="budget_title">Presupuesto y Gastos - Jose</string>
+    <string name="budget_prev_month">Mes anterior</string>
+    <string name="budget_next_month">Mes siguiente</string>
+    <string name="budget_month_picker_title">Ir a un mes</string>
+
+    <string name="budget_summary_title">Resumen del mes</string>
+    <string name="budget_income">Ingresos</string>
+    <string name="budget_expenses">Gastos</string>
+    <string name="budget_balance">Saldo</string>
+
+    <string name="budget_section_title">Presupuesto mensual</string>
+    <string name="budget_hint_limit">Monto máximo a gastar</string>
+    <string name="budget_save">Guardar</string>
+    <string name="budget_saved">Presupuesto guardado</string>
+    <string name="budget_not_set">Aún no defines un presupuesto para este mes</string>
+    <string name="budget_status_ok">Gastaste %1$s de %2$s (%3$d%%) · Te quedan %4$s</string>
+    <string name="budget_status_over">Gastaste %1$s de %2$s · Te pasaste por %3$s</string>
+    <string name="budget_error_insufficient">Saldo insuficiente. Disponible: %1$s</string>
+
+    <string name="budget_new_title">Nuevo movimiento</string>
+    <string name="budget_type_expense">Gasto</string>
+    <string name="budget_type_income">Ingreso</string>
+    <string name="budget_hint_amount">Monto</string>
+    <string name="budget_hint_category">Categoría</string>
+    <string name="budget_hint_description">Descripción (opcional)</string>
+    <string name="budget_add">Agregar</string>
+    <string name="budget_expense_added">Gasto agregado</string>
+    <string name="budget_income_added">Ingreso agregado</string>
+    <string name="budget_error_amount">Ingresa un monto válido</string>
+    <string name="budget_error_category">Elige una categoría</string>
+    <string name="budget_hint_date">Fecha</string>
+    <string name="budget_date_picker_title">Fecha del movimiento</string>
+
+    <string name="budget_list_title">Movimientos del mes</string>
+    <string name="budget_empty">Todavía no hay movimientos este mes</string>
+    <string name="budget_no_description">Sin descripción</string>
+    <string name="budget_delete">Eliminar movimiento</string>
+    <string name="budget_delete_title">Eliminar movimiento</string>
+    <string name="budget_delete_message">¿Seguro que quieres eliminar este movimiento de %1$s?</string>
+    <string name="budget_delete_confirm">Eliminar</string>
+    <string name="budget_cancel">Cancelar</string>
+
+    <string name="categories_title">Categorías</string>
+    <string name="categories_add">Agregar categoría</string>
+    <string name="categories_empty">No hay categorías de este tipo</string>
+    <string name="categories_edit">Editar categoría</string>
+    <string name="budget_manage_categories">Administrar categorías</string>
+
+    <string name="categories_new">Nueva categoría</string>
+    <string name="categories_name_hint">Nombre</string>
+    <string name="categories_icon_label">Ícono</string>
+    <string name="categories_color_label">Color</string>
+    <string name="categories_error_name">Escribe un nombre</string>
+    <string name="categories_error_duplicate">Ya existe una categoría con ese nombre</string>
+    <string name="categories_delete_message">¿Eliminar la categoría %1$s? Los movimientos ya registrados conservarán su nombre.</string>
+
+</resources>

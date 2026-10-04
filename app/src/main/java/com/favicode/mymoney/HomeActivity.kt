@@ -13,11 +13,19 @@ import com.favicode.mymoney.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import android.graphics.Color
+import android.view.View
+import com.favicode.mymoney.databinding.ItemCategoryRowBinding
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var auth: FirebaseAuth
+
+    private lateinit var repository: BudgetRepository
     private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +34,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        repository = BudgetRepository(this, auth.currentUser?.uid ?: "invitado")
 
         setupToolbarAndDrawer()
         setupUserDataInDrawerHeader()
@@ -33,6 +42,89 @@ class HomeActivity : AppCompatActivity() {
         setupChartFilters()
         setupBackNavigation()
     }
+    override fun onResume() {
+        super.onResume()
+        updateButtonStyles(isWeekly = false, isMonthly = true, isYearly = false)
+        applyChartData(buildMonthlyData())
+        showCategories()
+    }
+    private fun showCategories() {
+        val now = Calendar.getInstance()
+        val totals = repository.getExpenseTotalsByCategory(now.get(Calendar.YEAR), now.get(Calendar.MONTH))
+        val grandTotal = totals.sumOf { it.second }
+        val palette = listOf("#00E676", "#00D0B3", "#FFB300", "#29B6F6", "#AB47BC", "#FF7043", "#8D6E63")
+
+        binding.llCategories.removeAllViews()
+        binding.tvNoCategories.visibility = if (totals.isEmpty()) View.VISIBLE else View.GONE
+
+        totals.forEachIndexed { index, (name, amount) ->
+            val percent = if (grandTotal > 0) (amount / grandTotal * 100).toInt() else 0
+            val row = ItemCategoryRowBinding.inflate(layoutInflater, binding.llCategories, false)
+            row.tvCategoryName.text = name
+            row.tvCategoryValue.text = String.format(Locale.US, "S/ %,.2f (%d%%)", amount, percent)
+            row.progressCategory.progress = percent
+            row.progressCategory.setIndicatorColor(Color.parseColor(palette[index % palette.size]))
+            binding.llCategories.addView(row.root)
+        }
+    }
+    private fun applyChartData(data: List<FinancialChartView.BarData>) {
+        binding.financialChartView.setChartData(data)
+        // setChartData no dispara el listener, así que actualizamos el resumen a mano
+        data.lastOrNull()?.let { showSummary(it.income, it.expense) }
+    }
+
+    private fun showSummary(income: Float, expense: Float) {
+        binding.tvTotalBalance.text = String.format(Locale.US, "S/ %,.2f", income - expense)
+        binding.tvTotalIncome.text = String.format(Locale.US, "+ S/ %,.2f", income)
+        binding.tvTotalExpenses.text = String.format(Locale.US, "- S/ %,.2f", expense)
+    }
+
+    private fun buildMonthlyData(): List<FinancialChartView.BarData> {
+        val labelFormat = SimpleDateFormat("MMM", Locale("es", "PE"))
+        val cal = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_MONTH, 1)
+            add(Calendar.MONTH, -5)          // 5 meses atrás + el actual = 6 barras
+        }
+        val list = mutableListOf<FinancialChartView.BarData>()
+        repeat(6) {
+            val s = repository.getMonthSummary(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH))
+            val label = labelFormat.format(cal.time).replace(".", "").take(3)
+                .replaceFirstChar { it.uppercase() }
+            list.add(FinancialChartView.BarData(label, s.income.toFloat(), s.expense.toFloat()))
+            cal.add(Calendar.MONTH, 1)
+        }
+        return list
+    }
+
+    private fun buildWeeklyData(): List<FinancialChartView.BarData> {
+        val labelFormat = SimpleDateFormat("EEE", Locale("es", "PE"))
+        val cal = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
+            add(Calendar.DAY_OF_YEAR, -6)    // últimos 7 días, el último es hoy
+        }
+        val list = mutableListOf<FinancialChartView.BarData>()
+        repeat(7) {
+            val start = cal.timeInMillis
+            val label = labelFormat.format(cal.time).replace(".", "").take(3)
+                .replaceFirstChar { it.uppercase() }
+            cal.add(Calendar.DAY_OF_YEAR, 1)
+            val s = repository.getSummaryBetween(start, cal.timeInMillis)
+            list.add(FinancialChartView.BarData(label, s.income.toFloat(), s.expense.toFloat()))
+        }
+        return list
+    }
+
+    private fun buildYearlyData(): List<FinancialChartView.BarData> {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        return (currentYear - 3..currentYear).map { year ->
+            val start = Calendar.getInstance().apply { clear(); set(year, Calendar.JANUARY, 1) }.timeInMillis
+            val end = Calendar.getInstance().apply { clear(); set(year + 1, Calendar.JANUARY, 1) }.timeInMillis
+            val s = repository.getSummaryBetween(start, end)
+            FinancialChartView.BarData(year.toString(), s.income.toFloat(), s.expense.toFloat())
+        }
+    }
+
 
     private fun setupToolbarAndDrawer() {
         setSupportActionBar(binding.toolbar)
@@ -86,7 +178,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_budget -> {
-                    Toast.makeText(this, "Sección Ingreso de Presupuesto/Gastos (Jose)", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, BudgetActivity::class.java))
                     true
                 }
                 R.id.nav_settings -> {
@@ -113,40 +205,17 @@ class HomeActivity : AppCompatActivity() {
 
         binding.btnFilterWeekly.setOnClickListener {
             updateButtonStyles(isWeekly = true, isMonthly = false, isYearly = false)
-            val weeklyData = listOf(
-                FinancialChartView.BarData("Lun", 800f, 350f),
-                FinancialChartView.BarData("Mar", 1200f, 400f),
-                FinancialChartView.BarData("Mié", 950f, 600f),
-                FinancialChartView.BarData("Jue", 1500f, 200f),
-                FinancialChartView.BarData("Vie", 1100f, 500f),
-                FinancialChartView.BarData("Sáb", 450f, 700f),
-                FinancialChartView.BarData("Dom", 500f, 250f)
-            )
-            binding.financialChartView.setChartData(weeklyData)
+            applyChartData(buildWeeklyData())
         }
 
         binding.btnFilterMonthly.setOnClickListener {
             updateButtonStyles(isWeekly = false, isMonthly = true, isYearly = false)
-            val monthlyData = listOf(
-                FinancialChartView.BarData("Ene", 4500f, 2100f),
-                FinancialChartView.BarData("Feb", 5200f, 2800f),
-                FinancialChartView.BarData("Mar", 4800f, 3100f),
-                FinancialChartView.BarData("Abr", 6100f, 2400f),
-                FinancialChartView.BarData("May", 5800f, 2900f),
-                FinancialChartView.BarData("Jun", 6500f, 2250f)
-            )
-            binding.financialChartView.setChartData(monthlyData)
+            applyChartData(buildMonthlyData())
         }
 
         binding.btnFilterYearly.setOnClickListener {
             updateButtonStyles(isWeekly = false, isMonthly = false, isYearly = true)
-            val yearlyData = listOf(
-                FinancialChartView.BarData("2021", 45000f, 28000f),
-                FinancialChartView.BarData("2022", 52000f, 32000f),
-                FinancialChartView.BarData("2023", 68000f, 39000f),
-                FinancialChartView.BarData("2024", 75000f, 41000f)
-            )
-            binding.financialChartView.setChartData(yearlyData)
+            applyChartData(buildYearlyData())
         }
     }
 
