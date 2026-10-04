@@ -25,6 +25,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollBudget"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -264,6 +265,7 @@
 
             <!-- TARJETA 3: Nuevo movimiento -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -279,6 +281,7 @@
                     android:padding="20dp">
 
                     <TextView
+                        android:id="@+id/tvFormTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/budget_new_title"
@@ -412,6 +415,15 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         app:cornerRadius="12dp" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCancelEdit"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/budget_cancel"
+                        android:textAllCaps="false"
+                        android:textColor="@color/text_secondary"
+                        android:visibility="gone" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnManageCategories"

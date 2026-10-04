@@ -73,6 +73,24 @@ class BudgetRepository(context: Context, userId: String) {
     fun deleteTransaction(id: Long) {
         save(getAllTransactions().filterNot { it.id == id })
     }
+    fun updateTransaction(
+        id: Long,
+        type: Transaction.Type,
+        amount: Double,
+        category: String,
+        description: String,
+        timestamp: Long
+    ) {
+        save(getAllTransactions().map {
+            if (it.id == id) it.copy(
+                type = type,
+                amount = amount,
+                category = category,
+                description = description,
+                timestamp = timestamp
+            ) else it
+        })
+    }
 
     fun getMonthSummary(year: Int, month: Int): MonthSummary {
         val items = getTransactionsOfMonth(year, month)

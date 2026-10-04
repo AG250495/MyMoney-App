@@ -18,6 +18,9 @@ import java.util.Locale
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.TimeZone
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.view.View
 /**
  * Pantalla "Ingreso de presupuesto / gastos mensuales" (parte de Jose).
  *
@@ -35,6 +38,8 @@ class BudgetActivity : AppCompatActivity() {
     private val shownMonth: Calendar = Calendar.getInstance().apply { set(Calendar.DAY_OF_MONTH, 1) }
 
     private var selectedType = Transaction.Type.EXPENSE
+
+    private var editingOriginal: Transaction? = null
 
     private var selectedDateMillis: Long = System.currentTimeMillis()
 
@@ -73,6 +78,7 @@ class BudgetActivity : AppCompatActivity() {
     private fun setupList() {
         adapter = TransactionAdapter(
             categoryOf = { categoryMap[it.type to it.category] },
+            onItemClick = { startEditing(it) },
             onDeleteClick = { confirmDelete(it) }
         )
         binding.rvTransactions.layoutManager = LinearLayoutManager(this)
@@ -117,7 +123,51 @@ class BudgetActivity : AppCompatActivity() {
         binding.btnAddTransaction.setOnClickListener { addTransaction() }
         binding.btnManageCategories.setOnClickListener {
             startActivity(Intent(this, CategoriesActivity::class.java))
-        }    }
+        }
+        binding.btnCancelEdit.setOnClickListener { stopEditing() }
+    }
+    private fun startEditing(item: Transaction) {
+        editingOriginal = item
+
+        selectType(item.type)              // cambia Gasto/Ingreso y las categorías
+        selectedDateMillis = item.timestamp
+        updateDateField()
+
+        binding.etAmount.setText(formatPlain(item.amount))
+        binding.actCategory.setText(item.category, false)
+        updateCategoryIcon(item.category)
+        binding.etDescription.setText(item.description)
+        binding.tilAmount.error = null
+        binding.tilCategory.error = null
+
+        binding.tvFormTitle.setText(R.string.budget_edit_title)
+        binding.btnAddTransaction.setText(R.string.budget_save_changes)
+        binding.btnCancelEdit.visibility = View.VISIBLE
+
+        // Llevar la vista al formulario
+        binding.scrollBudget.post {
+            binding.scrollBudget.smoothScrollTo(0, binding.cardForm.top)
+        }
+    }
+
+    private fun stopEditing() {
+        editingOriginal = null
+
+        binding.tvFormTitle.setText(R.string.budget_new_title)
+        binding.btnAddTransaction.setText(R.string.budget_add)
+        binding.btnCancelEdit.visibility = View.GONE
+
+        binding.etAmount.setText("")
+        binding.etDescription.setText("")
+        binding.tilAmount.error = null
+        binding.tilCategory.error = null
+        clearCategorySelection()
+    }
+
+    private fun isSameMonth(millis: Long, year: Int, month: Int): Boolean {
+        val c = Calendar.getInstance().apply { timeInMillis = millis }
+        return c.get(Calendar.YEAR) == year && c.get(Calendar.MONTH) == month
+    }
 
     private fun selectType(type: Transaction.Type) {
         selectedType = type
@@ -126,14 +176,37 @@ class BudgetActivity : AppCompatActivity() {
         styleTypeButton(binding.btnTypeIncome, type == Transaction.Type.INCOME, R.color.income_green, R.color.bg_dark)
 
         setCategoryAdapter()
-        binding.actCategory.setText("", false)
+        clearCategorySelection()
         binding.tilCategory.error = null
+
     }
 
     private fun setCategoryAdapter() {
-        val categories = repository.getCategories(selectedType).map { it.name }
-        binding.actCategory.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, categories))
+        val categories = repository.getCategories(selectedType)
+        binding.actCategory.setAdapter(CategoryDropdownAdapter(this, categories))
         binding.actCategory.setDropDownBackgroundResource(R.color.card_dark_secondary)
+
+        // Al elegir una opción, mostrar su ícono dentro del campo
+        binding.actCategory.setOnItemClickListener { parent, _, position, _ ->
+            updateCategoryIcon(parent.getItemAtPosition(position) as String)
+        }
+        // Por si la categoría elegida cambió de color o ícono mientras estabas en otra pantalla
+        updateCategoryIcon(binding.actCategory.text?.toString().orEmpty())
+    }
+    /** Pone (o quita) el ícono de la categoría dentro del campo. */
+    private fun updateCategoryIcon(name: String) {
+        val category = repository.getCategories(selectedType).firstOrNull { it.name == name }
+        if (category == null) {
+            binding.tilCategory.startIconDrawable = null
+            return
+        }
+        binding.tilCategory.setStartIconDrawable(CategoryIcons.resId(category.iconKey))
+        binding.tilCategory.setStartIconTintList(ColorStateList.valueOf(Color.parseColor(category.colorHex)))
+    }
+
+    private fun clearCategorySelection() {
+        binding.actCategory.setText("", false)
+        updateCategoryIcon("")
     }
 
     private fun styleTypeButton(button: MaterialButton, active: Boolean, activeColor: Int, activeTextColor: Int) {
@@ -169,33 +242,42 @@ class BudgetActivity : AppCompatActivity() {
         if (!valid || amount == null) return
 
         val dateCal = Calendar.getInstance().apply { timeInMillis = selectedDateMillis }
+        val year = dateCal.get(Calendar.YEAR)
+        val month = dateCal.get(Calendar.MONTH)
+        val original = editingOriginal
 
         // No gastar más de lo que hay disponible en el mes de la fecha elegida
         if (selectedType == Transaction.Type.EXPENSE) {
-            val summary = repository.getMonthSummary(
-                dateCal.get(Calendar.YEAR), dateCal.get(Calendar.MONTH)
-            )
-            if (amount > summary.balance) {
+            var available = repository.getMonthSummary(year, month).balance
+
+            // Si estamos editando, el movimiento original no cuenta (se va a reemplazar)
+            if (original != null && isSameMonth(original.timestamp, year, month)) {
+                available += if (original.type == Transaction.Type.EXPENSE) original.amount else -original.amount
+            }
+
+            if (amount > available) {
                 binding.tilAmount.error = getString(
                     R.string.budget_error_insufficient,
-                    money(summary.balance.coerceAtLeast(0.0))
+                    money(available.coerceAtLeast(0.0))
                 )
                 return
             }
         }
 
-        repository.addTransaction(selectedType, amount, category, description, selectedDateMillis)
+        if (original == null) {
+            repository.addTransaction(selectedType, amount, category, description, selectedDateMillis)
+            val msg = if (selectedType == Transaction.Type.INCOME) R.string.budget_income_added else R.string.budget_expense_added
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        } else {
+            repository.updateTransaction(original.id, selectedType, amount, category, description, selectedDateMillis)
+            Toast.makeText(this, R.string.budget_updated, Toast.LENGTH_SHORT).show()
+        }
 
-        binding.etAmount.setText("")
-        binding.etDescription.setText("")
-        binding.actCategory.setText("", false)
+        stopEditing()
         hideKeyboard()
 
-        val msg = if (selectedType == Transaction.Type.INCOME) R.string.budget_income_added else R.string.budget_expense_added
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-
         // Mostrar el mes donde quedó guardado
-        shownMonth.set(dateCal.get(Calendar.YEAR), dateCal.get(Calendar.MONTH), 1)
+        shownMonth.set(year, month, 1)
         loadMonth(updateBudgetField = true)
     }
     private fun confirmDelete(item: Transaction) {
@@ -203,6 +285,7 @@ class BudgetActivity : AppCompatActivity() {
             .setTitle(R.string.budget_delete_title)
             .setMessage(getString(R.string.budget_delete_message, item.category))
             .setPositiveButton(R.string.budget_delete_confirm) { _, _ ->
+                if (editingOriginal?.id == item.id) stopEditing()
                 repository.deleteTransaction(item.id)
                 loadMonth(updateBudgetField = false)
             }

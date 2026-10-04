@@ -57,4 +57,8 @@
     <string name="categories_error_duplicate">Ya existe una categoría con ese nombre</string>
     <string name="categories_delete_message">¿Eliminar la categoría %1$s? Los movimientos ya registrados conservarán su nombre.</string>
 
+    <string name="budget_edit_title">Editar movimiento</string>
+    <string name="budget_save_changes">Guardar cambios</string>
+    <string name="budget_updated">Movimiento actualizado</string>
+
 </resources>

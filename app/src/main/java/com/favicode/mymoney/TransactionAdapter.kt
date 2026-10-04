@@ -15,7 +15,9 @@ import java.util.Locale
 
 class TransactionAdapter(
     private val categoryOf: (Transaction) -> Category?,
+    private val onItemClick: (Transaction) -> Unit,
     private val onDeleteClick: (Transaction) -> Unit
+
 ) : ListAdapter<Transaction, TransactionAdapter.ViewHolder>(DIFF) {
 
     private val dateFormat = SimpleDateFormat("dd MMM", Locale("es", "PE"))
@@ -52,6 +54,7 @@ class TransactionAdapter(
         }
 
         b.btnDelete.setOnClickListener { onDeleteClick(item) }
+        b.root.setOnClickListener { onItemClick(item) }
     }
 
     private companion object {
