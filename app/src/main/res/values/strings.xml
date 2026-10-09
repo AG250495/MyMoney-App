@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">MyMoney</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Navigation Drawer Options -->
+    <string name="menu_home">Menú principal (Barcita)</string>
+    <string name="menu_goals">Metas (Alex)</string>
+    <string name="menu_chatbot">Chatbot (Fabri)</string>
+    <string name="menu_budget">Ingreso de presupuesto/gastos (Jose)</string>
+    <string name="menu_settings">Ajustes (Artu)</string>
+    <string name="menu_account_header">Cuenta</string>
+    <string name="menu_logout">Cerrar sesión</string>
+
+    <!-- Drawer Header -->
+    <string name="nav_header_avatar_desc">Avatar de usuario</string>
+    <string name="nav_header_default_name">MyMoney - Usuario</string>
+    <string name="nav_header_default_email">usuario@correo.com</string>
+
+    <!-- Home Financial Strings -->
+    <string name="home_title">Menú Principal - Barcita</string>
+    <string name="summary_title">Resumen General</string>
+    <string name="total_balance_label">Saldo Total</string>
+    <string name="income_label">Ingresos del mes</string>
+    <string name="expenses_label">Gastos del mes</string>
+    <string name="balance_amount">S/ 4,250.00</string>
+    <string name="income_amount">+ S/ 6,500.00</string>
+    <string name="expense_amount">- S/ 2,250.00</string>
+    <string name="chart_title">Resumen de Gastos e Ingresos</string>
+    <string name="chart_tab_weekly">Semanal</string>
+    <string name="chart_tab_monthly">Mensual</string>
+    <string name="chart_tab_yearly">Anual</string>
+    <string name="income_legend">Ingresos</string>
+    <string name="expenses_legend">Gastos</string>
+    <string name="category_breakdown_title">Desglose por Categorías</string>
+    <string name="cat_food">Alimentos</string>
+    <string name="cat_food_val">S/ 850.00 (38%)</string>
+    <string name="cat_services">Servicios</string>
+    <string name="cat_services_val">S/ 600.00 (27%)</string>
+    <string name="cat_entertainment">Entretenimiento</string>
+    <string name="cat_entertainment_val">S/ 450.00 (20%)</string>
+    <string name="cat_transport">Transporte</string>
+    <string name="cat_transport_val">S/ 350.00 (15%)</string>
+
+    <string name="navigation_drawer_open">Abrir menú de navegación</string>
+    <string name="navigation_drawer_close">Cerrar menú de navegación</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="lorem_ipsum">Bienvenido a MyMoney</string>
+</resources>
